@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARCH PROMPT ENGINE STARTER • LOGIN</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#060812;
+      --bg-2:#0a1020;
+      --panel:rgba(14,18,32,.72);
+      --panel-strong:rgba(9,13,25,.88);
+      --line:rgba(255,255,255,.08);
+      --line-2:rgba(255,255,255,.13);
+      --text:#eef4ff;
+      --muted:#96a7c5;
+      --accent:#6d5efc;
+      --accent2:#00c2ff;
+      --good:#10b981;
+      --danger:#ff5f7a;
+      --shadow:0 30px 90px rgba(0,0,0,.38);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --transition:240ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:'Inter',sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(109,94,252,.22), transparent 26%),
+        radial-gradient(circle at 85% 12%, rgba(0,194,255,.14), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(16,185,129,.06), transparent 26%),
+        linear-gradient(180deg, #09101d 0%, #060812 40%, #05070e 100%);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.07;
+      background-image:
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size:32px 32px;
+      mask-image:radial-gradient(circle at center, black 25%, transparent 85%);
+      -webkit-mask-image:radial-gradient(circle at center, black 25%, transparent 85%);
+    }
+
+    .hidden{display:none!important}
+    .container{
+      width:min(1800px, calc(100% - 36px));
+      margin:0 auto;
+      padding:24px 0 40px;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .card{
+      position:relative;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.015)),
+        rgba(9,13,25,.72);
+      backdrop-filter:blur(26px);
+      -webkit-backdrop-filter:blur(26px);
+      box-shadow:var(--shadow);
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(255,255,255,.26), transparent 55%);
+      opacity:.8;
+      pointer-events:none;
+    }
+
+    .brand{
+      padding:34px;
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      width:max-content;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#c8d4ff;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .eyebrow .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--good), #7affcf);
+      box-shadow:0 0 15px rgba(16,185,129,.85);
+    }
+
+    h1{
+      margin:18px 0 0;
+      font-size:clamp(34px, 5vw, 58px);
+      line-height:.95;
+      letter-spacing:-.05em;
+      font-weight:800;
+      background:linear-gradient(90deg, #fff 0%, #dbe6ff 40%, #b4c7ff 70%, #6de0ff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .sub{
+      margin-top:18px;
+      max-width:760px;
+      color:#a7b7d1;
+      font-size:15px;
+      line-height:1.75;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+      margin-top:26px;
+    }
+
+    .mini{
+      padding:18px 16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:
+        linear-gradient(180deg, rgba(109,94,252,.08), rgba(255,255,255,.01)),
+        rgba(255,255,255,.02);
+    }
+
+    .mini .k{
+      font-size:11px;
+      letter-spacing:.12em;
+      color:var(--muted);
+      text-transform:uppercase;
+      font-weight:700;
+    }
+
+    .mini .v{
+      margin-top:8px;
+      font-size:26px;
+      font-weight:800;
+      letter-spacing:-.04em;
+    }
+
+    .pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:18px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(109,94,252,.12), rgba(0,194,255,.08)),
+        rgba(255,255,255,.03);
+      color:#dce7ff;
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .pill::before{
+      content:"";
+      width:7px;
+      height:7px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 12px rgba(109,94,252,.55);
+    }
+
+    .auth-card{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .auth-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .auth-title{
+      margin:0;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+
+    .auth-desc{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .tab-btn{
+      border:none;
+      border-radius:12px;
+      min-height:42px;
+      padding:0 14px;
+      color:#dce7ff;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      font:inherit;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all var(--transition);
+    }
+
+    .tab-btn.active{
+      background:linear-gradient(135deg, rgba(109,94,252,.28), rgba(0,194,255,.18));
+      border-color:rgba(255,255,255,.12);
+      box-shadow:0 14px 26px rgba(0,0,0,.18);
+    }
+
+    .auth-panel{
+      display:grid;
+      gap:14px;
+    }
+
+    .field{
+      display:grid;
+      gap:8px;
+    }
+
+    label{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      color:#dbe6fb;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .label-note{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+    }
+
+    input, select, textarea{
+      width:100%;
+      border:none;
+      outline:none;
+      color:var(--text);
+      border-radius:14px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        rgba(7,10,19,.94);
+      border:1px solid var(--line);
+      box-shadow:
+        0 1px 0 rgba(255,255,255,.04) inset,
+        0 10px 20px rgba(0,0,0,.18);
+      transition:border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+    }
+
+    input, select{
+      min-height:52px;
+      padding:0 14px;
+      font:inherit;
+      font-size:14px;
+      font-weight:500;
+    }
+
+    textarea{
+      min-height:320px;
+      resize:vertical;
+      padding:16px 18px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:13px;
+      line-height:1.66;
+      white-space:pre-wrap;
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color:rgba(0,194,255,.5);
+      box-shadow:
+        0 0 0 1px rgba(0,194,255,.35),
+        0 0 28px rgba(0,194,255,.10),
+        0 12px 30px rgba(0,0,0,.24);
+      transform:translateY(-1px);
+    }
+
+    .actions, .stack-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+    }
+
+    button{
+      position:relative;
+      overflow:hidden;
+      border:none;
+      outline:none;
+      min-height:48px;
+      padding:0 16px;
+      border-radius:14px;
+      color:#fff;
+      background:rgba(255,255,255,.05);
+      border:1px solid transparent;
+      font:inherit;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all var(--transition);
+    }
+
+    button:hover{transform:translateY(-2px)}
+    button:active{transform:translateY(0)}
+
+    .primary{
+      background:linear-gradient(135deg, #705dff 0%, #4f74ff 40%, #00c2ff 100%);
+      box-shadow:0 18px 36px rgba(79,116,255,.28);
+    }
+
+    .secondary{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015)),
+        rgba(255,255,255,.015);
+      border:1px solid var(--line);
+      color:#dfe8fb;
+    }
+
+    .ghost{
+      background:rgba(255,255,255,.02);
+      border:1px dashed rgba(255,255,255,.12);
+      color:#b7c7e2;
+    }
+
+    .linklike{
+      background:transparent;
+      padding:0;
+      min-height:auto;
+      border:none;
+      color:#9ddfff;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .message{
+      padding:14px 16px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:#cfdcff;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .message.success{
+      border-color:rgba(16,185,129,.25);
+      background:rgba(16,185,129,.08);
+      color:#c9ffea;
+    }
+
+    .message.error{
+      border-color:rgba(255,95,122,.22);
+      background:rgba(255,95,122,.08);
+      color:#ffd8e0;
+    }
+
+    .tiny{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .app-shell{
+      display:grid;
+      gap:24px;
+    }
+
+    .app-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      padding:26px 28px;
+    }
+
+    .app-header-left{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      min-width:0;
+    }
+
+    .logo-box{
+      width:74px;
+      height:74px;
+      border-radius:22px;
+      display:grid;
+      place-items:center;
+      background:
+        linear-gradient(135deg, rgba(109,94,252,.28), rgba(0,194,255,.16)),
+        rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      font-size:26px;
+      font-weight:800;
+      box-shadow:0 16px 36px rgba(0,0,0,.22);
+    }
+
+    .app-title{
+      margin:0;
+      font-size:34px;
+      letter-spacing:-.04em;
+      font-weight:800;
+      background:linear-gradient(90deg, #fff 0%, #d9e8ff 42%, #7be1ff 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .app-sub{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .app-header-right{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .user-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#dfe8fb;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .user-chip .avatar{
+      width:26px;
+      height:26px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+      box-shadow:0 0 16px rgba(109,94,252,.36);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      padding:0 0 4px;
+    }
+
+    .stat{
+      padding:18px 16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:
+        linear-gradient(180deg, rgba(109,94,252,.08), rgba(255,255,255,.01)),
+        rgba(255,255,255,.02);
+    }
+
+    .stat .k{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:700;
+    }
+
+    .stat .v{
+      margin-top:8px;
+      font-size:28px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.04em;
+    }
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);
+      gap:24px;
+      align-items:start;
+    }
+
+    .panel{
+      padding:24px;
+    }
+
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:20px;
+    }
+
+    .panel-title{
+      margin:0;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .panel-title::before{
+      content:"";
+      width:10px;
+      height:26px;
+      border-radius:999px;
+      background:linear-gradient(180deg, var(--accent), var(--accent2));
+      box-shadow:0 0 20px rgba(109,94,252,.55);
+    }
+
+    .panel-desc{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:#dfe8fb;
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:16px;
+    }
+
+    .full{grid-column:1 / -1}
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin:6px 0 4px;
+      color:#9db2ff;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:800;
+    }
+
+    .section-title::after{
+      content:"";
+      flex:1;
+      height:1px;
+      background:linear-gradient(90deg, rgba(255,255,255,.14), transparent);
+    }
+
+    .number-wrap{
+      position:relative;
+    }
+
+    .number-wrap::after{
+      content:"m";
+      position:absolute;
+      right:14px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#9fb0cb;
+      font-size:13px;
+      font-weight:700;
+      pointer-events:none;
+    }
+
+    .number-wrap input{padding-right:34px}
+
+    .range-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+
+    .range-card{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        rgba(255,255,255,.02);
+    }
+
+    .range-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .range-head span{
+      color:#e4edff;
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .num-badge{
+      min-width:36px;
+      height:30px;
+      padding:0 10px;
+      display:grid;
+      place-items:center;
+      border-radius:999px;
+      background:
+        linear-gradient(135deg, rgba(109,94,252,.25), rgba(0,194,255,.16)),
+        rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    input[type="range"]{
+      -webkit-appearance:none;
+      appearance:none;
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:
+        linear-gradient(90deg, var(--accent) 0%, var(--accent2) var(--progress,50%), rgba(255,255,255,.08) var(--progress,50%), rgba(255,255,255,.08) 100%);
+      outline:none;
+      cursor:pointer;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+
+    input[type="range"]::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      appearance:none;
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      border:2px solid rgba(255,255,255,.85);
+      background:radial-gradient(circle at 35% 30%, #fff, #a5b4fc 45%, #6d5efc 100%);
+      box-shadow:
+        0 0 0 5px rgba(109,94,252,.15),
+        0 10px 20px rgba(0,0,0,.25),
+        0 0 20px rgba(109,94,252,.45);
+    }
+
+    input[type="range"]::-moz-range-track{
+      height:8px;
+      border:none;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+    }
+
+    input[type="range"]::-moz-range-thumb{
+      width:20px;
+      height:20px;
+      border:none;
+      border-radius:50%;
+      background:linear-gradient(135deg, #fff, #8ab4ff 55%, #6d5efc);
+      box-shadow:0 0 0 5px rgba(109,94,252,.15), 0 10px 20px rgba(0,0,0,.25);
+    }
+
+    .check-row{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:12px;
+    }
+
+    .check{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-height:56px;
+      padding:14px 16px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+        rgba(255,255,255,.015);
+      color:#e6edfb;
+      font-size:13px;
+      font-weight:600;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .check input{
+      -webkit-appearance:none;
+      appearance:none;
+      width:20px;
+      height:20px;
+      flex:0 0 20px;
+      border-radius:7px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.04);
+      position:relative;
+    }
+
+    .check input:checked{
+      border-color:rgba(0,194,255,.38);
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 0 4px rgba(109,94,252,.12);
+    }
+
+    .check input:checked::after{
+      content:"";
+      position:absolute;
+      left:6px;
+      top:2px;
+      width:4px;
+      height:9px;
+      border:solid white;
+      border-width:0 2px 2px 0;
+      transform:rotate(45deg);
+    }
+
+    .sticky{
+      display:grid;
+      gap:20px;
+      position:sticky;
+      top:18px;
+    }
+
+    .output-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .output-title{
+      margin:0;
+      font-size:18px;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .output-title::before{
+      content:"";
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 0 16px rgba(109,94,252,.55);
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .kpi{
+      padding:18px 16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(109,94,252,.10), rgba(255,255,255,0)),
+        rgba(255,255,255,.02);
+      text-align:center;
+    }
+
+    .kpi .k{
+      color:#8ea0be;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+    }
+
+    .kpi .v{
+      margin-top:8px;
+      font-size:28px;
+      line-height:1;
+      font-weight:800;
+      letter-spacing:-.04em;
+    }
+
+    .footer-note{
+      margin-top:16px;
+      color:#7f8ba3;
+      font-size:12px;
+      text-align:center;
+      opacity:.85;
+    }
+
+    .toast{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      max-width:min(400px, calc(100vw - 32px));
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:linear-gradient(135deg, rgba(109,94,252,.96), rgba(0,194,255,.90));
+      color:#fff;
+      box-shadow:0 18px 40px rgba(0,0,0,.34);
+      transform:translateY(18px);
+      opacity:0;
+      pointer-events:none;
+      transition:transform .28s ease, opacity .28s ease;
+      z-index:999;
+    }
+
+    .toast.show{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .toast .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 0 10px rgba(255,255,255,.65);
+      flex:0 0 10px;
+    }
+
+    @media (max-width: 1380px){
+      .hero, .main-grid{grid-template-columns:1fr}
+      .sticky{position:relative;top:0}
+    }
+
+    @media (max-width: 960px){
+      .stats, .kpis, .hero-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+      .form-grid, .range-grid, .check-row{grid-template-columns:1fr}
+      .app-header{flex-direction:column;align-items:flex-start}
+      .app-header-right{justify-content:flex-start}
+    }
+
+    @media (max-width: 720px){
+      .container{width:min(100% - 20px, 1800px)}
+      .brand, .auth-card, .panel, .app-header{padding:20px}
+      .stats, .kpis, .hero-grid{grid-template-columns:1fr}
+      .tabs, .actions, .stack-actions{flex-direction:column}
+      button, .tab-btn{width:100%}
+      .output-head{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- AUTH / LANDING -->
+    <section id="authScreen">
+      <div class="hero">
+        <div class="card brand">
+          <div>
+            <div class="eyebrow"><span class="dot"></span> Starter Plan • Login + Senha</div>
+            <h1>ARCH PROMPT ENGINE</h1>
+            <div class="sub">
+              Produto digital com acesso protegido, cadastro, login, recuperação de senha e painel premium
+              para geração de prompts arquitetônicos cinematográficos. Ideal para vender como app online
+              individual no seu Plano 1.
+            </div>
+
+            <div class="hero-grid">
+              <div class="mini">
+                <div class="k">Acesso</div>
+                <div class="v">Login</div>
+              </div>
+              <div class="mini">
+                <div class="k">Entrega</div>
+                <div class="v">Web App</div>
+              </div>
+              <div class="mini">
+                <div class="k">Plano</div>
+                <div class="v">Starter</div>
+              </div>
+            </div>
+
+            <div class="pills">
+              <div class="pill">Cadastro</div>
+              <div class="pill">Reset de senha</div>
+              <div class="pill">Prompt premium</div>
+              <div class="pill">JSON export</div>
+              <div class="pill">Área protegida</div>
+            </div>
+          </div>
+
+          <div class="tiny">
+            Configure seu Supabase URL e Anon Key no código, publique este arquivo e use como seu MVP
+            de venda com autenticação.
+          </div>
+        </div>
+
+        <div class="card auth-card">
+          <div class="auth-top">
+            <div>
+              <h2 class="auth-title">Entrar na plataforma</h2>
+              <div class="auth-desc">
+                Faça login, crie sua conta ou solicite a recuperação da senha.
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="login">Login</button>
+            <button class="tab-btn" data-tab="signup">Cadastro</button>
+            <button class="tab-btn" data-tab="reset">Recuperar senha</button>
+          </div>
+
+          <div id="authMessage" class="message hidden"></div>
+
+          <form id="loginPanel" class="auth-panel">
+            <div class="field">
+              <label for="loginEmail"><span>E-mail</span><span class="label-note">required</span></label>
+              <input id="loginEmail" type="email" placeholder="voce@exemplo.com" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="loginPassword"><span>Senha</span><span class="label-note">required</span></label>
+              <input id="loginPassword" type="password" placeholder="Sua senha" autocomplete="current-password" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary" id="loginBtn">Entrar</button>
+            </div>
+            <button type="button" class="linklike" id="goReset">Esqueci minha senha</button>
+          </form>
+
+          <form id="signupPanel" class="auth-panel hidden">
+            <div class="field">
+              <label for="signupName"><span>Nome</span><span class="label-note">optional</span></label>
+              <input id="signupName" type="text" placeholder="Seu nome" autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="signupEmail"><span>E-mail</span><span class="label-note">required</span></label>
+              <input id="signupEmail" type="email" placeholder="voce@exemplo.com" autocomplete="email" required />
+            </div>
+            <div class="field">
+              <label for="signupPassword"><span>Senha</span><span class="label-note">min 6+</span></label>
+              <input id="signupPassword" type="password" placeholder="Crie uma senha" autocomplete="new-password" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary" id="signupBtn">Criar conta</button>
+            </div>
+            <div class="tiny">
+              Se a confirmação de e-mail estiver ativa no Supabase, o usuário precisará confirmar o endereço
+              antes de usar a conta.
+            </div>
+          </form>
+
+          <form id="resetPanel" class="auth-panel hidden">
+            <div class="field">
+              <label for="resetEmail"><span>E-mail</span><span class="label-note">required</span></label>
+              <input id="resetEmail" type="email" placeholder="voce@exemplo.com" autocomplete="email" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary" id="resetBtn">Enviar link de recuperação</button>
+            </div>
+            <div class="tiny">
+              O usuário receberá um link por e-mail e voltará para esta mesma página para criar uma nova senha.
+            </div>
+          </form>
+
+          <form id="updatePasswordPanel" class="auth-panel hidden">
+            <div class="field">
+              <label for="newPassword"><span>Nova senha</span><span class="label-note">recovery</span></label>
+              <input id="newPassword" type="password" placeholder="Digite a nova senha" autocomplete="new-password" />
+            </div>
+            <div class="field">
+              <label for="confirmNewPassword"><span>Confirmar nova senha</span><span class="label-note">match</span></label>
+              <input id="confirmNewPassword" type="password" placeholder="Repita a nova senha" autocomplete="new-password" />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary" id="updatePasswordBtn">Salvar nova senha</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- APP -->
+    <section id="appScreen" class="app-shell hidden">
+      <header class="card app-header">
+        <div class="app-header-left">
+          <div class="logo-box">AP</div>
+          <div>
+            <h2 class="app-title">ARCH PROMPT ENGINE</h2>
+            <div class="app-sub">Starter • plano com login e senha • app protegido</div>
+          </div>
+        </div>
+
+        <div class="app-header-right">
+          <div class="user-chip" id="userChip">
+            <span class="avatar" id="userAvatar">U</span>
+            <span id="userEmail">usuario@email.com</span>
+          </div>
+          <button class="secondary" id="logoutBtn" type="button">Sair</button>
+        </div>
+      </header>
+
+      <section class="stats">
+        <div class="stat">
+          <div class="k">Estilos</div>
+          <div class="v">7</div>
+        </div>
+        <div class="stat">
+          <div class="k">Biomas</div>
+          <div class="v">5</div>
+        </div>
+        <div class="stat">
+          <div class="k">Climas</div>
+          <div class="v">8</div>
+        </div>
+        <div class="stat">
+          <div class="k">Combinações</div>
+          <div class="v">5M+</div>
+        </div>
+      </section>
+
+      <main class="main-grid">
+        <section class="card panel">
+          <div class="panel-head">
+            <div>
+              <h3 class="panel-title">Construtor Cinemático</h3>
+              <div class="panel-desc">
+                Gere prompts arquitetônicos premium com controle visual, câmera, luz, clima, bioma e anti-CGI.
+              </div>
+            </div>
+            <div class="badge">Auto Update</div>
+          </div>
+
+          <div class="form-grid">
+            <div class="full section-title">Base Criativa</div>
+
+            <div class="field">
+              <label for="arch"><span>Tipo de Arquitetura</span><span class="label-note">scene core</span></label>
+              <select id="arch">
+                <option value="architecture based on reference image">Construção da imagem de referência</option>
+                <option value="Luxury modern house">Casa moderna de luxo</option>
+                <option value="Minimalist residence">Residência minimalista</option>
+                <option value="Contemporary villa">Vila contemporânea</option>
+                <option value="Urban apartment building">Edifício de apartamentos urbano</option>
+                <option value="Museum architecture">Arquitetura de museu</option>
+                <option value="Office tower">Torre de escritórios</option>
+                <option value="Luxury resort architecture">Arquitetura de resort de luxo</option>
+                <option value="Waterfront luxury villa">Vila de luxo à beira-mar</option>
+                <option value="Brutalist architecture">Arquitetura brutalista</option>
+                <option value="Tropical modern residence">Residência moderna tropical</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="ratio"><span>Proporção</span><span class="label-note">framing</span></label>
+              <select id="ratio">
+                <option value="3:2 Editorial" selected>3:2 Editorial</option>
+                <option value="4:5 Vertical">4:5 Vertical</option>
+                <option value="1:1 Square">1:1 Quadrado</option>
+                <option value="16:9 Landscape">16:9 Paisagem</option>
+                <option value="21:9 Cinematic">21:9 Cinemático</option>
+                <option value="9:16 Vertical">9:16 Vertical</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="stylePreset"><span>Predefinição de Estilo</span><span class="label-note">look</span></label>
+              <select id="stylePreset">
+                <option value="MIR inspired">Inspirado na MIR</option>
+                <option value="DBOX inspired">Inspirado na DBOX</option>
+                <option value="Brick Visual inspired">Inspirado na Brick Visual</option>
+                <option value="Luxigon inspired">Inspirado na Luxigon</option>
+                <option value="ArchDaily editorial">Editorial ArchDaily</option>
+                <option value="Luxury magazine">Revista de Luxo</option>
+                <option value="Neutral photoreal">Fotorrealismo Neutro</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="aiDirector"><span>Diretor de Prompt</span><span class="label-note">director</span></label>
+              <select id="aiDirector">
+                <option value="Balanced realism director">Diretor de realismo equilibrado</option>
+                <option value="Luxury editorial director">Diretor editorial de luxo</option>
+                <option value="Documentary architecture director">Diretor de arquitetura documental</option>
+                <option value="Cinematic contrast director">Diretor de contraste cinemático</option>
+                <option value="Calm atmospheric realism director">Diretor de realismo atmosférico</option>
+              </select>
+            </div>
+
+            <div class="full section-title">Câmera e Óptica</div>
+
+            <div class="field">
+              <label for="lens"><span>Lente Física</span><span class="label-note">lens</span></label>
+              <select id="lens">
+                <option value="28mm tilt-shift architectural" selected>28mm tilt-shift arquitetônica</option>
+                <option value="32mm architectural lens">32mm lente arquitetônica</option>
+                <option value="35mm documentary lens">35mm documental</option>
+                <option value="50mm architectural portrait">50mm retrato arquitetônico</option>
+                <option value="65mm medium format">65mm médio formato</option>
+                <option value="80mm cinema compression">80mm compressão cinematográfica</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="sensor"><span>Sensor</span><span class="label-note">capture</span></label>
+              <select id="sensor">
+                <option value="Full Frame">Full Frame</option>
+                <option value="Medium Format" selected>Médio Formato</option>
+                <option value="Large Format Simulation">Simulação Large Format</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="movement"><span>Movimento de Câmera</span><span class="label-note">motion</span></label>
+              <select id="movement">
+                <option value="Static tripod precision" selected>Precisão estática em tripé</option>
+                <option value="Subtle cinematic drift feeling">Drift cinemático sutil</option>
+                <option value="Documentary handheld restraint">Mão documental contida</option>
+                <option value="Calm floating camera mood">Câmera flutuante calma</option>
+                <option value="High-end commercial stillness">Quietude comercial premium</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="height"><span>Altura da Lente</span><span class="label-note">meters</span></label>
+              <div class="number-wrap">
+                <input id="height" type="number" value="1.6" step="0.1" min="0.5" max="3.0">
+              </div>
+            </div>
+
+            <div class="full section-title">Luz, Clima e Cor</div>
+
+            <div class="field">
+              <label for="light"><span>Sistema de Iluminação</span><span class="label-note">light</span></label>
+              <select id="light">
+                <option value="Soft morning light" selected>Luz suave da manhã</option>
+                <option value="Bright midday sun">Sol claro de meio-dia</option>
+                <option value="Golden hour sunset">Golden Hour</option>
+                <option value="Blue hour twilight">Blue Hour</option>
+                <option value="Overcast diffused light">Luz difusa</option>
+                <option value="Architectural side light">Luz lateral marcante</option>
+                <option value="Stormy sky light">Céu tempestuoso</option>
+                <option value="Urban dusk light">Entardecer urbano</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="weather"><span>Clima e Atmosfera</span><span class="label-note">weather</span></label>
+              <select id="weather">
+                <option value="Clear sky">Céu limpo</option>
+                <option value="Light clouds" selected>Nuvens esparsas</option>
+                <option value="Fog atmosphere">Neblina</option>
+                <option value="Rain wet surfaces">Chuva leve</option>
+                <option value="After rain reflections">Pós-chuva</option>
+                <option value="Dust haze atmosphere">Névoa de calor</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="lut"><span>Color Grading (LUT)</span><span class="label-note">color</span></label>
+              <select id="lut">
+                <option value="ArchDaily Editorial" selected>Editorial ArchDaily</option>
+                <option value="Luxury Magazine">Revista de Luxo</option>
+                <option value="Architectural Documentary">Documentário Cru</option>
+                <option value="Premium Cinema">Cinema Premium</option>
+                <option value="Ultra Neutral Master LUT">Neutro Absoluto</option>
+                <option value="Subtle Realism LUT">Realismo Sutil</option>
+                <option value="Deep Shadow Cinema">Sombras Profundas</option>
+                <option value="Soft Film Look">Película Analógica</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="urbanDensity"><span>Contexto Urbano</span><span class="label-note">context</span></label>
+              <select id="urbanDensity">
+                <option value="Minimal surroundings">Isolado / Entorno minimalista</option>
+                <option value="Refined residential context">Loteamento residencial fechado</option>
+                <option value="Balanced urban context" selected>Bairro urbano arborizado</option>
+                <option value="Dense urban context">Centro urbano adensado</option>
+                <option value="Resort context realism">Resort</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="biome"><span>Bioma Paisagístico</span><span class="label-note">landscape</span></label>
+              <select id="biome">
+                <option value="Tropical biome">Tropical denso</option>
+                <option value="Mediterranean biome">Mediterrâneo</option>
+                <option value="Urban temperate biome" selected>Urbano temperado</option>
+                <option value="Minimal ornamental biome">Ornamental minimalista</option>
+                <option value="Luxury resort biome">Exótico de luxo</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="humanActivity"><span>População da Cena</span><span class="label-note">humans</span></label>
+              <select id="humanActivity">
+                <option value="Minimal presence" selected>Presença mínima</option>
+                <option value="Casual walking">Caminhada casual</option>
+                <option value="Urban pedestrian flow">Fluxo urbano</option>
+                <option value="Family residential activity">Atividade familiar</option>
+                <option value="Business environment">Ambiente corporativo</option>
+              </select>
+            </div>
+
+            <div class="full section-title">Controles de Realismo</div>
+
+            <div class="full range-grid">
+              <div class="range-card">
+                <div class="range-head"><span>Nível Geral de Realismo</span><div class="num-badge" id="realismVal">9</div></div>
+                <input type="range" id="realism" min="0" max="10" value="9">
+              </div>
+
+              <div class="range-card">
+                <div class="range-head"><span>Densidade de Vegetação</span><div class="num-badge" id="vegVal">6</div></div>
+                <input type="range" id="veg" min="0" max="10" value="6">
+              </div>
+
+              <div class="range-card">
+                <div class="range-head"><span>Volume de Veículos</span><div class="num-badge" id="carVal">3</div></div>
+                <input type="range" id="car" min="0" max="10" value="3">
+              </div>
+
+              <div class="range-card">
+                <div class="range-head"><span>Volume de Pessoas</span><div class="num-badge" id="humanVal">2</div></div>
+                <input type="range" id="human" min="0" max="10" value="2">
+              </div>
+
+              <div class="range-card">
+                <div class="range-head"><span>Desgaste de Materiais</span><div class="num-badge" id="agingVal">3</div></div>
+                <input type="range" id="aging" min="0" max="10" value="3">
+              </div>
+
+              <div class="range-card">
+                <div class="range-head"><span>Densidade Atmosférica</span><div class="num-badge" id="atmoVal">2</div></div>
+                <input type="range" id="atmo" min="0" max="10" value="2">
+              </div>
+            </div>
+
+            <div class="full section-title">Módulos Anti-CGI</div>
+
+            <div class="full check-row">
+              <label class="check"><input type="checkbox" id="glass" checked> Cálculo de refração em vidros</label>
+              <label class="check"><input type="checkbox" id="imperfections" checked> Micro-imperfeições de superfície</label>
+              <label class="check"><input type="checkbox" id="physics" checked> Rebatimento de luz global (GI)</label>
+              <label class="check"><input type="checkbox" id="antiCGI" checked> Trava restritiva Anti-CGI</label>
+            </div>
+          </div>
+
+          <div class="stack-actions" style="margin-top:20px">
+            <button class="primary" id="btnPreset" type="button">Preset: IA Director</button>
+            <button class="secondary" id="btnRandom" type="button">Gerar Mutação Aleatória</button>
+            <button class="secondary" id="btnCopyPrompt" type="button">Copiar Prompt</button>
+            <button class="secondary" id="btnCopyJSON" type="button">Copiar JSON</button>
+            <button class="ghost" id="btnDownload" type="button">Baixar JSON</button>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi"><div class="k">Estilos</div><div class="v">7</div></div>
+            <div class="kpi"><div class="k">Biomas</div><div class="v">5</div></div>
+            <div class="kpi"><div class="k">Climas</div><div class="v">8</div></div>
+            <div class="kpi"><div class="k">Combos</div><div class="v">5M+</div></div>
+          </div>
+        </section>
+
+        <aside class="sticky">
+          <section class="card panel">
+            <div class="output-head">
+              <h4 class="output-title">Prompt de Geração</h4>
+              <button class="secondary" id="btnCopyPromptTop" type="button">Copiar</button>
+            </div>
+            <textarea id="prompt" spellcheck="false"></textarea>
+          </section>
+
+          <section class="card panel">
+            <div class="output-head">
+              <h4 class="output-title">Estrutura JSON</h4>
+              <div class="actions">
+                <button class="secondary" id="btnCopyJSONTop" type="button">Copiar JSON</button>
+                <button class="ghost" id="btnDownloadTop" type="button">Download</button>
+              </div>
+            </div>
+            <textarea id="json" spellcheck="false"></textarea>
+          </section>
+        </aside>
+      </main>
+
+      <div class="footer-note">
+        Plano 1 Starter • login e senha • pronto para venda como app protegido
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast">
+    <span class="dot"></span>
+    <span id="toastText">Ação concluída</span>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // =========================================================
+    // CONFIGURE AQUI
+    // =========================================================
+    const SUPABASE_URL = "SEU_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "SEU_SUPABASE_ANON_KEY";
+
+    // Para reset de senha, use a URL pública desta página.
+    // Ex.: https://seudominio.com/index.html
+    const PASSWORD_REDIRECT_URL = window.location.origin + window.location.pathname;
+
+    // =========================================================
+    // APP
+    // =========================================================
+    const { createClient } = supabase;
+    const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+
+    function $(id){ return document.getElementById(id); }
+
+    function showToast(message){
+      const toast = $("toast");
+      $("toastText").textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    function showMessage(message, type="info"){
+      const el = $("authMessage");
+      el.textContent = message;
+      el.className = "message";
+      if (type === "success") el.classList.add("success");
+      if (type === "error") el.classList.add("error");
+      el.classList.remove("hidden");
+    }
+
+    function clearMessage(){
+      $("authMessage").className = "message hidden";
+      $("authMessage").textContent = "";
+    }
+
+    function setLoading(button, loading, text){
+      if (!button) return;
+      if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent;
+      button.disabled = loading;
+      button.textContent = loading ? text : button.dataset.defaultText;
+      button.style.opacity = loading ? ".75" : "1";
+    }
+
+    function switchTab(name){
+      clearMessage();
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+
+      $("loginPanel").classList.toggle("hidden", name !== "login");
+      $("signupPanel").classList.toggle("hidden", name !== "signup");
+      $("resetPanel").classList.toggle("hidden", name !== "reset");
+    }
+
+    function showUpdatePasswordPanel(){
+      clearMessage();
+      $("loginPanel").classList.add("hidden");
+      $("signupPanel").classList.add("hidden");
+      $("resetPanel").classList.add("hidden");
+      $("updatePasswordPanel").classList.remove("hidden");
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    }
+
+    function showAuthScreen(){
+      $("authScreen").classList.remove("hidden");
+      $("appScreen").classList.add("hidden");
+    }
+
+    function getInitialFromEmail(email){
+      if (!email) return "U";
+      return email.trim().charAt(0).toUpperCase();
+    }
+
+    function showAppScreen(user){
+      $("authScreen").classList.add("hidden");
+      $("appScreen").classList.remove("hidden");
+      $("userEmail").textContent = user.email || "Usuário";
+      $("userAvatar").textContent = getInitialFromEmail(user.email);
+      generate();
+    }
+
+    function syncRangeVisual(input){
+      const min = Number(input.min || 0);
+      const max = Number(input.max || 100);
+      const val = Number(input.value || 0);
+      const percent = ((val - min) / (max - min)) * 100;
+      input.style.setProperty("--progress", percent + "%");
+    }
+
+    function updateRanges(){
+      $("realismVal").textContent = $("realism").value;
+      $("vegVal").textContent = $("veg").value;
+      $("carVal").textContent = $("car").value;
+      $("humanVal").textContent = $("human").value;
+      $("agingVal").textContent = $("aging").value;
+      $("atmoVal").textContent = $("atmo").value;
+      document.querySelectorAll('input[type="range"]').forEach(syncRangeVisual);
+    }
+
+    function clampHeight(value){
+      const num = Number(value);
+      if (Number.isNaN(num)) return 1.6;
+      return Math.min(3.0, Math.max(0.5, num));
+    }
+
+    function currentValues(){
+      const height = clampHeight($("height").value);
+      $("height").value = height.toFixed(1);
+
+      return {
+        arch: $("arch").value,
+        ratio: $("ratio").value,
+        stylePreset: $("stylePreset").value,
+        aiDirector: $("aiDirector").value,
+        lens: $("lens").value,
+        sensor: $("sensor").value,
+        movement: $("movement").value,
+        height: Number(height.toFixed(1)),
+        light: $("light").value,
+        weather: $("weather").value,
+        lut: $("lut").value,
+        urbanDensity: $("urbanDensity").value,
+        biome: $("biome").value,
+        humanActivity: $("humanActivity").value,
+        realism: Number($("realism").value),
+        veg: Number($("veg").value),
+        car: Number($("car").value),
+        human: Number($("human").value),
+        aging: Number($("aging").value),
+        atmo: Number($("atmo").value),
+        glass: $("glass").checked,
+        imperfections: $("imperfections").checked,
+        physics: $("physics").checked,
+        antiCGI: $("antiCGI").checked
+      };
+    }
+
+    function buildPrompt(v){
+      const vegetationBlock = "Photographic vegetation realism, real botanical micro-detail, natural leaf translucency, subsurface scattering, visible veins, non-uniform aging, irregular plant growth, random foliage distribution, subtle environmental wear, realistic tonal variation, no plastic leaves, no symmetry, no repeated foliage pattern, no artificial saturation.";
+      const peopleBlock = "People appearing as natural documentary presence rather than posed models. Casual everyday clothing with natural fabric folds and wrinkles. Natural skin texture with subtle pores and tone variation. Relaxed posture and natural gestures. People interacting naturally with the architecture, sometimes walking or slightly blurred in motion. Neutral clothing colors and realistic lighting interaction. Avoid fashion poses, CGI humans or hyper-perfect faces.";
+      const vehicleBlock = "Ultra realistic vehicles with real automotive paint, subtle metallic flake and layered clear coat reflections. Slight dust accumulation, tiny road particles and micro scratches in the clear coat. Real rubber tires with subtle road dust and visible sidewall lettering. Complex headlight optics with internal reflections. Natural reflections of surrounding architecture across curved body panels. Soft tire compression and contact shadows on pavement. Avoid showroom-perfect cars, plastic paint, mirror reflections or CGI vehicles.";
+      const glassBlock = v.glass ? "Photographic glass with real thickness, natural Fresnel, balanced reflection and transparency, slight dust or smudges, faint coherent interior visibility, and no mirror-only behavior." : "";
+      const physicsBlock = v.physics ? "Physical lighting behavior, realistic global illumination, believable bounce light, natural highlight roll-off, and physically plausible shadow softness." : "";
+      const imperfectionBlock = v.imperfections ? "Micro surface variation, realistic construction tolerances, subtle dust accumulation, light stains, restrained weathering, roughness variation, and no perfect surfaces." : "";
+      const antiCGIBlock = v.antiCGI ? "Avoid CGI appearance, plastic vegetation, showroom-perfect vehicles, hyper-perfect faces, repeated patterns, heavy grading, artificial saturation, and artificial perfection." : "";
+
+      return `Ultra realistic architectural photography of ${v.arch}, directed by ${v.aiDirector}, with a ${v.stylePreset} visual language.
+
+Camera using ${v.lens}, ${v.sensor} sensor simulation, camera height ${v.height}m, ${v.movement}, corrected vertical perspective, and natural architectural framing.
+
+Lighting preset: ${v.light}.
+Weather condition: ${v.weather}.
+Cinematic LUT: ${v.lut}.
+Aspect ratio: ${v.ratio}.
+
+Vegetation biome: ${v.biome}.
+Urban density simulation: ${v.urbanDensity}.
+Human activity system: ${v.humanActivity}.
+
+Realism level ${v.realism}/10.
+Vegetation density ${v.veg}/10.
+Vehicle density ${v.car}/10.
+Human presence ${v.human}/10.
+Material aging ${v.aging}/10.
+Atmosphere depth ${v.atmo}/10.
+
+${imperfectionBlock}
+${glassBlock}
+${physicsBlock}
+
+${vegetationBlock}
+
+${peopleBlock}
+
+${vehicleBlock}
+
+${antiCGIBlock}`.trim();
+    }
+
+    function generate(){
+      updateRanges();
+      const v = currentValues();
+      $("prompt").value = buildPrompt(v);
+
+      const json = {
+        engine: {
+          name: "ARCH_PROMPT_ENGINE",
+          version: "STARTER_AUTH",
+          mode: "CINEMA_AI_ENGINE",
+          prompt_director: v.aiDirector,
+          style_preset: v.stylePreset
+        },
+        scene: {
+          architecture: v.arch,
+          aspect_ratio: v.ratio,
+          mood: "cinematic architectural realism",
+          urban_density: v.urbanDensity,
+          biome_generator: v.biome,
+          human_activity_system: v.humanActivity
+        },
+        camera: {
+          lens: v.lens,
+          sensor: v.sensor,
+          height_meters: v.height,
+          movement_simulation: v.movement,
+          framing: "architectural editorial composition",
+          perspective_control: "corrected verticals"
+        },
+        lighting: {
+          preset: v.light,
+          weather: v.weather,
+          atmosphere_depth: v.atmo
+        },
+        color_pipeline: {
+          cinematic_lut: v.lut,
+          grading_style: "editorial cinematic balance"
+        },
+        realism_controls: {
+          overall_realism: v.realism,
+          vegetation_density: v.veg,
+          vehicle_density: v.car,
+          human_presence: v.human,
+          material_aging: v.aging,
+          atmosphere_depth: v.atmo
+        },
+        photoreal_modules: {
+          glass: v.glass,
+          imperfection_system: v.imperfections,
+          physics_pipeline: v.physics,
+          anti_cgi: v.antiCGI
+        }
+      };
+
+      $("json").value = JSON.stringify(json, null, 2);
+    }
+
+    function randomFrom(arr){
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function aiDirectorPreset(){
+      $("stylePreset").value = "ArchDaily editorial";
+      $("aiDirector").value = "Balanced realism director";
+      $("lens").value = "28mm tilt-shift architectural";
+      $("sensor").value = "Medium Format";
+      $("movement").value = "Static tripod precision";
+      $("height").value = "1.6";
+      $("light").value = "Soft morning light";
+      $("weather").value = "Light clouds";
+      $("lut").value = "ArchDaily Editorial";
+      $("urbanDensity").value = "Balanced urban context";
+      $("biome").value = "Urban temperate biome";
+      $("humanActivity").value = "Minimal presence";
+      $("realism").value = 9;
+      $("veg").value = 6;
+      $("car").value = 3;
+      $("human").value = 2;
+      $("aging").value = 3;
+      $("atmo").value = 2;
+      $("glass").checked = true;
+      $("imperfections").checked = true;
+      $("physics").checked = true;
+      $("antiCGI").checked = true;
+      generate();
+      showToast("Preset aplicado");
+    }
+
+    function randomPrompt(){
+      const stylePresets = ["MIR inspired","DBOX inspired","Brick Visual inspired","Luxigon inspired","ArchDaily editorial","Luxury magazine","Neutral photoreal"];
+      const directors = ["Balanced realism director","Luxury editorial director","Documentary architecture director","Cinematic contrast director","Calm atmospheric realism director"];
+      const archs = ["architecture based on reference image","Luxury modern house","Minimalist residence","Contemporary villa","Urban apartment building","Museum architecture","Luxury resort architecture","Tropical modern residence"];
+      const ratios = ["3:2 Editorial","4:5 Vertical","1:1 Square","16:9 Landscape","21:9 Cinematic","9:16 Vertical"];
+      const lenses = ["28mm tilt-shift architectural","32mm architectural lens","35mm documentary lens","50mm architectural portrait","65mm medium format","80mm cinema compression"];
+      const sensors = ["Full Frame","Medium Format","Large Format Simulation"];
+      const movements = ["Static tripod precision","Subtle cinematic drift feeling","Documentary handheld restraint","Calm floating camera mood","High-end commercial stillness"];
+      const lights = ["Soft morning light","Bright midday sun","Golden hour sunset","Blue hour twilight","Overcast diffused light","Architectural side light","Stormy sky light","Urban dusk light"];
+      const weathers = ["Clear sky","Light clouds","Fog atmosphere","Rain wet surfaces","After rain reflections","Dust haze atmosphere"];
+      const luts = ["ArchDaily Editorial","Luxury Magazine","Architectural Documentary","Premium Cinema","Ultra Neutral Master LUT","Subtle Realism LUT","Deep Shadow Cinema","Soft Film Look"];
+      const densities = ["Minimal surroundings","Refined residential context","Balanced urban context","Dense urban context","Resort context realism"];
+      const biomes = ["Tropical biome","Mediterranean biome","Urban temperate biome","Minimal ornamental biome","Luxury resort biome"];
+      const activities = ["Minimal presence","Casual walking","Urban pedestrian flow","Family residential activity","Business environment"];
+
+      $("stylePreset").value = randomFrom(stylePresets);
+      $("aiDirector").value = randomFrom(directors);
+      $("arch").value = randomFrom(archs);
+      $("ratio").value = randomFrom(ratios);
+      $("lens").value = randomFrom(lenses);
+      $("sensor").value = randomFrom(sensors);
+      $("movement").value = randomFrom(movements);
+      $("light").value = randomFrom(lights);
+      $("weather").value = randomFrom(weathers);
+      $("lut").value = randomFrom(luts);
+      $("urbanDensity").value = randomFrom(densities);
+      $("biome").value = randomFrom(biomes);
+      $("humanActivity").value = randomFrom(activities);
+      $("realism").value = String(Math.floor(Math.random() * 2) + 8);
+      $("veg").value = String(Math.floor(Math.random() * 3) + 5);
+      $("car").value = String(Math.floor(Math.random() * 3) + 2);
+      $("human").value = String(Math.floor(Math.random() * 3) + 1);
+      $("aging").value = String(Math.floor(Math.random() * 3) + 2);
+      $("atmo").value = String(Math.floor(Math.random() * 3) + 1);
+      $("glass").checked = Math.random() > 0.15;
+      $("imperfections").checked = Math.random() > 0.08;
+      $("physics").checked = true;
+      $("antiCGI").checked = true;
+      generate();
+      showToast("Mutação aleatória gerada");
+    }
+
+    async function copyText(text, successMessage){
+      try{
+        if (navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(text);
+        } else {
+          const temp = document.createElement("textarea");
+          temp.value = text;
+          temp.style.position = "fixed";
+          temp.style.left = "-9999px";
+          document.body.appendChild(temp);
+          temp.focus();
+          temp.select();
+          document.execCommand("copy");
+          temp.remove();
+        }
+        showToast(successMessage);
+      }catch(error){
+        console.error(error);
+        showToast("Não foi possível copiar");
+      }
+    }
+
+    function downloadJSON(){
+      const blob = new Blob([$("json").value], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "arch_prompt_starter.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      showToast("JSON baixado");
+    }
+
+    async function handleLogin(event){
+      event.preventDefault();
+      clearMessage();
+
+      const email = $("loginEmail").value.trim();
+      const password = $("loginPassword").value;
+
+      if (!email || !password){
+        showMessage("Preencha e-mail e senha.", "error");
+        return;
+      }
+
+      const btn = $("loginBtn");
+      setLoading(btn, true, "Entrando...");
+
+      try{
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+
+        showMessage("Login realizado com sucesso.", "success");
+        showToast("Login realizado");
+        if (data.user) showAppScreen(data.user);
+      }catch(error){
+        showMessage(error.message || "Não foi possível entrar.", "error");
+      }finally{
+        setLoading(btn, false);
+      }
+    }
+
+    async function handleSignup(event){
+      event.preventDefault();
+      clearMessage();
+
+      const name = $("signupName").value.trim();
+      const email = $("signupEmail").value.trim();
+      const password = $("signupPassword").value;
+
+      if (!email || !password){
+        showMessage("Preencha e-mail e senha.", "error");
+        return;
+      }
+
+      if (password.length < 6){
+        showMessage("Use uma senha com pelo menos 6 caracteres.", "error");
+        return;
+      }
+
+      const btn = $("signupBtn");
+      setLoading(btn, true, "Criando conta...");
+
+      try{
+        const { error } = await sb.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: PASSWORD_REDIRECT_URL,
+            data: { full_name: name || null }
+          }
+        });
+
+        if (error) throw error;
+
+        showMessage("Conta criada. Verifique seu e-mail para confirmar o acesso, caso a confirmação esteja ativa no projeto.", "success");
+        showToast("Cadastro enviado");
+        $("signupPanel").reset();
+      }catch(error){
+        showMessage(error.message || "Não foi possível criar a conta.", "error");
+      }finally{
+        setLoading(btn, false);
+      }
+    }
+
+    async function handleReset(event){
+      event.preventDefault();
+      clearMessage();
+
+      const email = $("resetEmail").value.trim();
+      if (!email){
+        showMessage("Digite o e-mail de recuperação.", "error");
+        return;
+      }
+
+      const btn = $("resetBtn");
+      setLoading(btn, true, "Enviando...");
+
+      try{
+        const { error } = await sb.auth.resetPasswordForEmail(email, {
+          redirectTo: PASSWORD_REDIRECT_URL
+        });
+
+        if (error) throw error;
+
+        showMessage("Se o e-mail existir, o link de recuperação foi enviado.", "success");
+        showToast("Link enviado");
+      }catch(error){
+        showMessage(error.message || "Não foi possível enviar o e-mail.", "error");
+      }finally{
+        setLoading(btn, false);
+      }
+    }
+
+    async function handleUpdatePassword(event){
+      event.preventDefault();
+      clearMessage();
+
+      const password = $("newPassword").value;
+      const confirm = $("confirmNewPassword").value;
+
+      if (!password || !confirm){
+        showMessage("Preencha os dois campos da nova senha.", "error");
+        return;
+      }
+
+      if (password !== confirm){
+        showMessage("As senhas não coincidem.", "error");
+        return;
+      }
+
+      if (password.length < 6){
+        showMessage("Use uma senha com pelo menos 6 caracteres.", "error");
+        return;
+      }
+
+      const btn = $("updatePasswordBtn");
+      setLoading(btn, true, "Salvando...");
+
+      try{
+        const { error } = await sb.auth.updateUser({ password });
+        if (error) throw error;
+
+        showMessage("Senha atualizada com sucesso. Agora você já pode entrar.", "success");
+        showToast("Senha atualizada");
+        $("updatePasswordPanel").reset();
+        switchTab("login");
+        $("updatePasswordPanel").classList.add("hidden");
+        $("loginPanel").classList.remove("hidden");
+      }catch(error){
+        showMessage(error.message || "Não foi possível atualizar a senha.", "error");
+      }finally{
+        setLoading(btn, false);
+      }
+    }
+
+    async function handleLogout(){
+      await sb.auth.signOut();
+      showToast("Sessão encerrada");
+      showAuthScreen();
+      switchTab("login");
+    }
+
+    async function checkSessionOnLoad(){
+      try{
+        const { data, error } = await sb.auth.getSession();
+        if (error) throw error;
+        if (data.session?.user){
+          showAppScreen(data.session.user);
+        } else {
+          showAuthScreen();
+        }
+      }catch(error){
+        console.error(error);
+        showAuthScreen();
+      }
+    }
+
+    function attachAppEvents(){
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => switchTab(btn.dataset.tab));
+      });
+
+      $("goReset").addEventListener("click", () => switchTab("reset"));
+      $("loginPanel").addEventListener("submit", handleLogin);
+      $("signupPanel").addEventListener("submit", handleSignup);
+      $("resetPanel").addEventListener("submit", handleReset);
+      $("updatePasswordPanel").addEventListener("submit", handleUpdatePassword);
+      $("logoutBtn").addEventListener("click", handleLogout);
+
+      document.querySelectorAll('#appScreen select, #appScreen input').forEach(el => {
+        el.addEventListener("input", generate);
+        el.addEventListener("change", generate);
+      });
+
+      $("btnPreset").addEventListener("click", aiDirectorPreset);
+      $("btnRandom").addEventListener("click", randomPrompt);
+      $("btnCopyPrompt").addEventListener("click", () => copyText($("prompt").value, "Prompt copiado"));
+      $("btnCopyJSON").addEventListener("click", () => copyText($("json").value, "JSON copiado"));
+      $("btnDownload").addEventListener("click", downloadJSON);
+      $("btnCopyPromptTop").addEventListener("click", () => copyText($("prompt").value, "Prompt copiado"));
+      $("btnCopyJSONTop").addEventListener("click", () => copyText($("json").value, "JSON copiado"));
+      $("btnDownloadTop").addEventListener("click", downloadJSON);
+    }
+
+    function attachAuthStateListener(){
+      sb.auth.onAuthStateChange((event, session) => {
+        if (event === "PASSWORD_RECOVERY"){
+          showAuthScreen();
+          showUpdatePasswordPanel();
+          showMessage("Agora defina sua nova senha.", "success");
+          return;
+        }
+
+        if (event === "SIGNED_IN" && session?.user){
+          showAppScreen(session.user);
+          return;
+        }
+
+        if (event === "SIGNED_OUT"){
+          showAuthScreen();
+          switchTab("login");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      if (!SUPABASE_URL || SUPABASE_URL === "https://yapfnmevfpttvbmexemf.supabase.co" || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "sb_publishable_tvpX5DRY34co4MbQfwQC0A_KJqRPmcg"){
+        showMessage("Configure SUPABASE_URL e SUPABASE_ANON_KEY no código antes de publicar.", "error");
+      }
+
+      attachAppEvents();
+      attachAuthStateListener();
+      updateRanges();
+      generate();
+      await checkSessionOnLoad();
+    });
+  </script>
+</body>
+</html>
