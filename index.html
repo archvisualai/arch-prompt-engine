@@ -1930,20 +1930,22 @@ ${antiCGIBlock}`.trim();
       });
     }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      if (!SUPABASE_URL || SUPABASE_URL === "https://yapfnmevfpttvbmexemf.supabase.co" || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY === "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlhcGZubWV2ZnB0dHZibWV4ZW1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNzI1MDgsImV4cCI6MjA4ODg0ODUwOH0.sQEn1vNxe6JicTB42zawCFSrDcrlIF34V2GnazwoutA"){
-        showMessage("Configure SUPABASE_URL e SUPABASE_ANON_KEY no código antes de publicar.", "error");
-      }
+   document.addEventListener("DOMContentLoaded", async () => {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    showMessage("Configure SUPABASE_URL e SUPABASE_ANON_KEY no código antes de publicar.", "error");
+    return;
+  }
 
-      attachAppEvents();
-      attachAuthStateListener();
-      updateRanges();
-      generate();
-      await checkSessionOnLoad();
-    });
+  attachAppEvents();
+  attachAuthStateListener();
+  updateRanges();
+  generate();
+  await checkSessionOnLoad();
+});
   </script>
 </body>
 
 </html>
+
 
 
